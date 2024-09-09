@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 
-const baseUrl = "http://localhost:5173/";
+const baseUrl = process.env.APP_URL || "http://localhost:5173/";
 test("has title", async ({ page }) => {
   await page.goto(baseUrl);
 
