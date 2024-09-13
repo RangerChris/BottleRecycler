@@ -9,6 +9,7 @@ import {
   ListItemText,
   Typography,
 } from "@mui/material";
+import Customer from "../domain/customer";
 
 interface props {
   id: number;
@@ -21,6 +22,7 @@ const Recycler = ({ id }: props) => {
   const plastic = Math.floor(Math.random() * (maxBottles - 1 + 1)) + 1;
   const metal = Math.floor(Math.random() * (maxBottles - 1 + 1)) + 1;
   const progress = Math.floor(Math.random() * (100 - 1 + 1)) + 1;
+  const customerQueue: Customer[] = [];
 
   return (
     <Card sx={{ maxWidth: 250 }}>
@@ -28,7 +30,9 @@ const Recycler = ({ id }: props) => {
         <Typography gutterBottom variant="h5" component="div">
           Recycler {id}
         </Typography>
-        Customer progress
+        Customers in queue: {customerQueue.length}
+        <br />
+        Customer { customerQueue[0]?.Id} progress
         <br />
         <LinearProgress variant="determinate" value={progress} />
         <p></p>
