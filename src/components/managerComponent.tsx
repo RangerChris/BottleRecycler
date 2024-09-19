@@ -1,4 +1,4 @@
-import { Button, Stack, Typography } from "@mui/material";
+import { Button, Stack, Tooltip } from "@mui/material";
 import RecyclerComponent from "./recyclerComponent";
 import React, { useState } from "react";
 
@@ -17,12 +17,11 @@ const ManagerComponent = ({ initialMoney }: props) => {
   const [money, setMoney] = useState(initialMoney);
 
   function handleBuyRecycler(): void {
-
     if (money < recyclerPrice) {
       return;
     }
 
-    setMoney(money-recyclerPrice);
+    setMoney(money - recyclerPrice);
     setRecyclerList((prevRecyclers) => [
       ...prevRecyclers,
       {
@@ -34,14 +33,19 @@ const ManagerComponent = ({ initialMoney }: props) => {
     ]);
   }
 
+  function handleEmptySale(saleAmount: number): void {
+    setMoney(money + saleAmount);
+  }
+
   return (
     <>
-      <Typography variant="h3">Bottle Recycler</Typography>
-      Money: {money}
+      Money: ${money.toFixed(2)}
       <br />
-      <Button variant="contained" onClick={handleBuyRecycler}>
-        Buy recycler
-      </Button>
+      <Tooltip title="$600">
+        <Button variant="contained" onClick={handleBuyRecycler}>
+          Buy recycler
+        </Button>
+      </Tooltip>
       <p></p>
       <Stack
         justifyContent="space-evenly"
@@ -50,7 +54,11 @@ const ManagerComponent = ({ initialMoney }: props) => {
         sx={{ flexWrap: "wrap" }}
       >
         {recyclerList.map((recycler) => (
-          <RecyclerComponent key={recycler.id} {...recycler} />
+          <RecyclerComponent
+            key={recycler.id}
+            id={recycler.id}
+            onSale={handleEmptySale}
+          />
         ))}
       </Stack>
     </>

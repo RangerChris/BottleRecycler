@@ -16,6 +16,7 @@ import { BottleType } from "../domain/Bottle";
 
 interface props {
   id: number;
+  onSale: (saleAmount: number) => void;
 }
 
 enum recyclerState {
@@ -25,7 +26,7 @@ enum recyclerState {
   Error = "Error",
 }
 
-const RecyclerComponent = ({ id }: props) => {
+const RecyclerComponent = ({ id, onSale }: props) => {
   const [plasticBottles, setPlasticBottles] = useState(0);
   const [glassBottles, setGlassBottles] = useState(0);
   const [metalBottles, setMetalBottles] = useState(0);
@@ -37,7 +38,6 @@ const RecyclerComponent = ({ id }: props) => {
   const maxBottles = 300;
 
   useEffect(() => {
-    // Loop to check the recycler
     const recyclerLoop = () => {
       ProcessCustomer();
       setProgress(customer?.TotalBottles);
@@ -50,7 +50,7 @@ const RecyclerComponent = ({ id }: props) => {
         setState(recyclerState.Full);
       }
     };
-    const intervalId = setInterval(recyclerLoop, 1000);
+    const intervalId = setInterval(recyclerLoop, 500);
 
     return () => {
       clearInterval(intervalId);
@@ -63,9 +63,11 @@ const RecyclerComponent = ({ id }: props) => {
 
       const nextBottle = customerQueue.at(-1)?.GetNextBottle();
       if (nextBottle == null) {
+        setCustomerQueue([...customerQueue.slice(0, -1)]);
         return;
       }
 
+      setCustomer(customerQueue.at(-1));
       if (nextBottle.Type == BottleType.Plastic) {
         setPlasticBottles(plasticBottles + 1);
       }
@@ -93,7 +95,6 @@ const RecyclerComponent = ({ id }: props) => {
 
       let newCustomer = new Customer(1);
       newCustomer.SetRandomNumberOfBottles();
-      setCustomer(newCustomer);
       setCustomerQueue([...customerQueue, newCustomer]);
       return;
     }
@@ -105,8 +106,9 @@ const RecyclerComponent = ({ id }: props) => {
   }
 
   function handleEmpty(): void {
-    //TODO: Set money
     const sale = (plasticBottles + metalBottles + glassBottles) * 1.36;
+    onSale(sale);
+    console.log("Sale: " + sale);
     setPlasticBottles(0);
     setMetalBottles(0);
     setGlassBottles(0);

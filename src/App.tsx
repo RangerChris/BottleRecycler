@@ -1,5 +1,5 @@
 import "./App.css";
-import { Container } from "@mui/material";
+import { Container, Typography } from "@mui/material";
 import Manager from "./components/managerComponent";
 import { useEffect } from "react";
 
@@ -17,7 +17,8 @@ function App() {
   return (
     <>
       <Container>
-        <Manager initialMoney={5000}></Manager>
+        <Typography variant="h3">Bottle Recycler</Typography>
+        <Manager initialMoney={1000}></Manager>
       </Container>
     </>
   );
