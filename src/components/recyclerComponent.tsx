@@ -11,17 +11,107 @@ import {
   Typography,
 } from "@mui/material";
 import Customer from "../domain/customer";
-import Recycler from "../domain/recycler";
+import { useEffect, useState } from "react";
+import { BottleType } from "../domain/Bottle";
 
 interface props {
   id: number;
 }
 
+enum recyclerState {
+  Stopped = "Stopped",
+  Running = "Running",
+  Full = "Full",
+  Error = "Error",
+}
+
 const RecyclerComponent = ({ id }: props) => {
-  const recycler: Recycler = new Recycler(id);
-  const maxBottles = 500;
-  const progress = Math.floor(Math.random() * (100 - 1 + 1)) + 1;
-  const customerQueue: Customer[] = [];
+  const [plasticBottles, setPlasticBottles] = useState(0);
+  const [glassBottles, setGlassBottles] = useState(0);
+  const [metalBottles, setMetalBottles] = useState(0);
+  const [customer, setCustomer] = useState<Customer>();
+  const [customerQueue, setCustomerQueue] = useState<Customer[]>([]);
+  const [state, setState] = useState(recyclerState.Stopped);
+  const [progress, setProgress] = useState<number | undefined>(0);
+
+  const maxBottles = 300;
+
+  useEffect(() => {
+    // Loop to check the recycler
+    const recyclerLoop = () => {
+      ProcessCustomer();
+      setProgress(customer?.TotalBottles);
+
+      if (
+        glassBottles >= maxBottles ||
+        metalBottles >= maxBottles ||
+        plasticBottles >= maxBottles
+      ) {
+        setState(recyclerState.Full);
+      }
+    };
+    const intervalId = setInterval(recyclerLoop, 1000);
+
+    return () => {
+      clearInterval(intervalId);
+    };
+
+    function ProcessCustomer(): void {
+      if (customerQueue.length == 0 || state != recyclerState.Running) {
+        return;
+      }
+
+      const nextBottle = customerQueue.at(-1)?.GetNextBottle();
+      if (nextBottle == null) {
+        return;
+      }
+
+      if (nextBottle.Type == BottleType.Plastic) {
+        setPlasticBottles(plasticBottles + 1);
+      }
+
+      if (nextBottle.Type == BottleType.Glass) {
+        setGlassBottles(glassBottles + 1);
+      }
+
+      if (nextBottle.Type == BottleType.Metal) {
+        setMetalBottles(metalBottles + 1);
+      }
+    }
+  }, [
+    customer?.TotalBottles,
+    customerQueue,
+    glassBottles,
+    metalBottles,
+    plasticBottles,
+    state,
+  ]);
+
+  function handleStartStop(): void {
+    if (state === recyclerState.Stopped) {
+      setState(recyclerState.Running);
+
+      let newCustomer = new Customer(1);
+      newCustomer.SetRandomNumberOfBottles();
+      setCustomer(newCustomer);
+      setCustomerQueue([...customerQueue, newCustomer]);
+      return;
+    }
+
+    if (state === recyclerState.Running) {
+      setState(recyclerState.Stopped);
+      return;
+    }
+  }
+
+  function handleEmpty(): void {
+    //TODO: Set money
+    const sale = (plasticBottles + metalBottles + glassBottles) * 1.36;
+    setPlasticBottles(0);
+    setMetalBottles(0);
+    setGlassBottles(0);
+    setState(recyclerState.Stopped);
+  }
 
   return (
     <Card sx={{ maxWidth: 250 }}>
@@ -34,40 +124,44 @@ const RecyclerComponent = ({ id }: props) => {
         Customer {customerQueue[0]?.Id} progress
         <br />
         <LinearProgress variant="determinate" value={progress} />
+        {progress}
         <p></p>
         <List>
           <ListItem>
-            <ListItemText primary="Status" secondary={recycler.State} />
+            <ListItemText primary="Status" secondary={state} />
           </ListItem>
           <ListItem>
-            <ListItemText primary="Glass" secondary={recycler.GlassBottles} />
+            <ListItemText primary="Glass" secondary={glassBottles} />
           </ListItem>
           <LinearProgress
             variant="determinate"
-            value={(recycler.GlassBottles / maxBottles) * 100}
+            value={(glassBottles / maxBottles) * 100}
           />
           <ListItem>
-            <ListItemText
-              primary="Plastic"
-              secondary={recycler.PlasticBottles}
-            />
+            <ListItemText primary="Plastic" secondary={plasticBottles} />
           </ListItem>
           <LinearProgress
             variant="determinate"
-            value={(recycler.PlasticBottles / maxBottles) * 100}
+            value={(plasticBottles / maxBottles) * 100}
           />
           <ListItem>
-            <ListItemText primary="Metal" secondary={recycler.MetalBottles} />
+            <ListItemText primary="Metal" secondary={metalBottles} />
           </ListItem>
           <LinearProgress
             variant="determinate"
-            value={(recycler.MetalBottles / maxBottles) * 100}
+            value={(metalBottles / maxBottles) * 100}
           />
         </List>
       </CardContent>
       <CardActions>
         <Tooltip title="Starts or stops the recycler">
-          <Button variant="contained" size="small">
+          <Button
+            variant="contained"
+            size="small"
+            onClick={() => {
+              handleStartStop();
+            }}
+          >
             Start
           </Button>
         </Tooltip>
@@ -77,7 +171,7 @@ const RecyclerComponent = ({ id }: props) => {
           </Button>
         </Tooltip>
         <Tooltip title="Empties the bottle containers to make room for more">
-          <Button variant="contained" size="small">
+          <Button variant="contained" size="small" onClick={handleEmpty}>
             Empty
           </Button>
         </Tooltip>

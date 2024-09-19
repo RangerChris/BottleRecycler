@@ -31,4 +31,14 @@ describe("Customer Class", () => {
     expect(customer["glass"]).toBeGreaterThan(0);
     expect(customer["metal"]).toBeGreaterThan(0);
   });
+
+  it("get some bottles.", () => {
+    const customer = new Customer(testId, 5, 10, 15);
+    expect(customer["plastic"]).toBe(5);
+    expect(customer["glass"]).toBe(10);
+    expect(customer["metal"]).toBe(15);
+    expect(customer.TotalBottles).toBe(30);
+    customer.GetNextBottle();
+    expect(customer.TotalBottles).toBe(29);
+  });
 });

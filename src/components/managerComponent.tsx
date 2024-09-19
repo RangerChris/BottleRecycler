@@ -1,15 +1,28 @@
 import { Button, Stack, Typography } from "@mui/material";
 import RecyclerComponent from "./recyclerComponent";
-import React from "react";
+import React, { useState } from "react";
 
 type Recycler = {
   id: number;
 };
 
-const ManagerComponent: React.FC = () => {
-  const [recyclerList, setRecyclerList] = React.useState<Recycler[]>([]);
+interface props {
+  initialMoney: number;
+}
 
-  function handleAddRecycler(): void {
+const recyclerPrice = 600;
+
+const ManagerComponent = ({ initialMoney }: props) => {
+  const [recyclerList, setRecyclerList] = React.useState<Recycler[]>([]);
+  const [money, setMoney] = useState(initialMoney);
+
+  function handleBuyRecycler(): void {
+
+    if (money < recyclerPrice) {
+      return;
+    }
+
+    setMoney(money-recyclerPrice);
     setRecyclerList((prevRecyclers) => [
       ...prevRecyclers,
       {
@@ -24,12 +37,12 @@ const ManagerComponent: React.FC = () => {
   return (
     <>
       <Typography variant="h3">Bottle Recycler</Typography>
-      <Button variant="contained" onClick={handleAddRecycler}>
-        Add recycler
+      Money: {money}
+      <br />
+      <Button variant="contained" onClick={handleBuyRecycler}>
+        Buy recycler
       </Button>
-
       <p></p>
-
       <Stack
         justifyContent="space-evenly"
         direction={"row"}
