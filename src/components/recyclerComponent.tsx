@@ -175,7 +175,7 @@ const RecyclerComponent = ({ id, onSale }: props) => {
               handleStartStop();
             }}
           >
-            Start
+            {state === recyclerState.Stopped ? "Start" : "Stop"}
           </Button>
         </Tooltip>
         <Tooltip title="Fix a jam and reset the recycler">

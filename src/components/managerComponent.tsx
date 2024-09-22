@@ -33,7 +33,7 @@ const ManagerComponent = ({ initialMoney }: props) => {
     ]);
   }
 
-  function handleEmptySale(saleAmount: number): void {
+  function handleSale(saleAmount: number): void {
     setMoney(money + saleAmount);
   }
 
@@ -57,7 +57,7 @@ const ManagerComponent = ({ initialMoney }: props) => {
           <RecyclerComponent
             key={recycler.id}
             id={recycler.id}
-            onSale={handleEmptySale}
+            onSale={handleSale}
           />
         ))}
       </Stack>
