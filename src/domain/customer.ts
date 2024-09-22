@@ -48,7 +48,7 @@ class Customer {
   }
 
   public SetRandomNumberOfBottles() {
-    const maxBottles = 50;
+    const maxBottles = 20;
     this.plastic = Math.floor(Math.random() * (maxBottles - 1 + 1)) + 1;
     this.glass = Math.floor(Math.random() * (maxBottles - 1 + 1)) + 1;
     this.metal = Math.floor(Math.random() * (maxBottles - 1 + 1)) + 1;

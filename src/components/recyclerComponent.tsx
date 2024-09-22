@@ -31,6 +31,7 @@ const RecyclerComponent = ({ id, onSale }: props) => {
   const [glassBottles, setGlassBottles] = useState(0);
   const [metalBottles, setMetalBottles] = useState(0);
   const [customer, setCustomer] = useState<Customer>();
+  const [customerCounter, setCustomerCounter] = useState<number>(1);
   const [customerQueue, setCustomerQueue] = useState<Customer[]>([]);
   const [state, setState] = useState(recyclerState.Stopped);
   const [progress, setProgress] = useState<number | undefined>(0);
@@ -49,6 +50,8 @@ const RecyclerComponent = ({ id, onSale }: props) => {
       ) {
         setState(recyclerState.Full);
       }
+
+      CheckForNewCustomer(generateRandomCustomer);
     };
     const intervalId = setInterval(recyclerLoop, 500);
 
@@ -56,18 +59,28 @@ const RecyclerComponent = ({ id, onSale }: props) => {
       clearInterval(intervalId);
     };
 
+    function generateRandomCustomer(): Customer {
+      setCustomerCounter(customerCounter + 1);
+      const newCustomer = new Customer(customerCounter);
+      newCustomer.SetRandomNumberOfBottles();
+      setCustomerQueue([...customerQueue, newCustomer]);
+
+      return newCustomer;
+    }
+
     function ProcessCustomer(): void {
       if (customerQueue.length == 0 || state != recyclerState.Running) {
         return;
       }
 
-      const nextBottle = customerQueue.at(-1)?.GetNextBottle();
+      const nextBottle = customerQueue.at(0)?.GetNextBottle();
       if (nextBottle == null) {
-        setCustomerQueue([...customerQueue.slice(0, -1)]);
+        // Remove first customer from queue
+        setCustomerQueue([...customerQueue.slice(1)]);
         return;
       }
 
-      setCustomer(customerQueue.at(-1));
+      setCustomer(customerQueue.at(0));
       if (nextBottle.Type == BottleType.Plastic) {
         setPlasticBottles(plasticBottles + 1);
       }
@@ -82,6 +95,7 @@ const RecyclerComponent = ({ id, onSale }: props) => {
     }
   }, [
     customer?.TotalBottles,
+    customerCounter,
     customerQueue,
     glassBottles,
     metalBottles,
@@ -93,9 +107,6 @@ const RecyclerComponent = ({ id, onSale }: props) => {
     if (state === recyclerState.Stopped) {
       setState(recyclerState.Running);
 
-      let newCustomer = new Customer(1);
-      newCustomer.SetRandomNumberOfBottles();
-      setCustomerQueue([...customerQueue, newCustomer]);
       return;
     }
 
@@ -123,7 +134,7 @@ const RecyclerComponent = ({ id, onSale }: props) => {
         </Typography>
         Customers in queue: {customerQueue.length}
         <br />
-        Customer {customerQueue[0]?.Id} progress
+        Customer {customerQueue?.at(0)?.Id} progress
         <br />
         <LinearProgress variant="determinate" value={progress} />
         {progress}
@@ -183,3 +194,9 @@ const RecyclerComponent = ({ id, onSale }: props) => {
 };
 
 export default RecyclerComponent;
+function CheckForNewCustomer(generateRandomCustomer: () => Customer) {
+  const chance = 0.05;
+  if (Math.random() < chance) {
+    generateRandomCustomer();
+  }
+}
