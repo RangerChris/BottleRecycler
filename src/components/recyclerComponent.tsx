@@ -30,6 +30,7 @@ const RecyclerComponent = ({ id, onSale }: props) => {
   const [plasticBottles, setPlasticBottles] = useState(0);
   const [glassBottles, setGlassBottles] = useState(0);
   const [metalBottles, setMetalBottles] = useState(0);
+  const [Jam, setJam] = useState(false);
   const [customer, setCustomer] = useState<Customer>();
   const [customerCounter, setCustomerCounter] = useState<number>(1);
   const [customerQueue, setCustomerQueue] = useState<Customer[]>([]);
@@ -51,7 +52,17 @@ const RecyclerComponent = ({ id, onSale }: props) => {
         setState(recyclerState.Full);
       }
 
-      CheckForNewCustomer(generateRandomCustomer);
+      if (customerQueue.length <= 4) {
+        CheckForNewCustomer(generateRandomCustomer);
+      }
+
+      if (state == recyclerState.Running) {
+        const chance = 0.01; // 1% chance of a jam
+        if (Math.random() < chance) {
+          setState(recyclerState.Error);
+          setJam(true);
+        }
+      }
     };
     const intervalId = setInterval(recyclerLoop, 500);
 
@@ -126,6 +137,11 @@ const RecyclerComponent = ({ id, onSale }: props) => {
     setState(recyclerState.Stopped);
   }
 
+  function handleJam(): void {
+    setJam(false);
+    setState(recyclerState.Stopped);
+  }
+
   return (
     <Card sx={{ maxWidth: 250 }}>
       <CardContent>
@@ -179,7 +195,12 @@ const RecyclerComponent = ({ id, onSale }: props) => {
           </Button>
         </Tooltip>
         <Tooltip title="Fix a jam and reset the recycler">
-          <Button variant="contained" size="small">
+          <Button
+            variant="contained"
+            size="small"
+            onClick={handleJam}
+            color={state === recyclerState.Error ? "error" : "primary"}
+          >
             Fix
           </Button>
         </Tooltip>
@@ -194,8 +215,9 @@ const RecyclerComponent = ({ id, onSale }: props) => {
 };
 
 export default RecyclerComponent;
+
 function CheckForNewCustomer(generateRandomCustomer: () => Customer) {
-  const chance = 0.05;
+  const chance = 0.05; // 5% change of new customer
   if (Math.random() < chance) {
     generateRandomCustomer();
   }
