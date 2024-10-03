@@ -1,5 +1,5 @@
 import "./App.css";
-import { Container, Typography } from "@mui/material";
+import { AppBar, Container, Toolbar, Typography } from "@mui/material";
 import Manager from "./components/managerComponent";
 import { useEffect } from "react";
 
@@ -16,8 +16,15 @@ function App() {
 
   return (
     <>
-      <Container>
-        <Typography variant="h3">Bottle Recycler</Typography>
+      <Container
+        maxWidth="lg"
+        sx={{ display: "flex", justifyContent: "left", padding: 10 }}
+      >
+        <AppBar position="fixed" sx={{ zIndex: 1000 }}>
+          <Toolbar>
+            <Typography variant="h2">Bottle Recycler</Typography>
+          </Toolbar>
+        </AppBar>
         <Manager initialMoney={1000}></Manager>
       </Container>
     </>

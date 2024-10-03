@@ -37,7 +37,7 @@ const RecyclerComponent = ({ id, onSale }: props) => {
   const [state, setState] = useState(recyclerState.Stopped);
   const [progress, setProgress] = useState<number | undefined>(0);
 
-  const maxBottles = 300;
+  const maxBottles = 100;
 
   useEffect(() => {
     const recyclerLoop = () => {
@@ -64,7 +64,7 @@ const RecyclerComponent = ({ id, onSale }: props) => {
         }
       }
     };
-    const intervalId = setInterval(recyclerLoop, 500);
+    const intervalId = setInterval(recyclerLoop, 400);
 
     return () => {
       clearInterval(intervalId);
@@ -128,9 +128,8 @@ const RecyclerComponent = ({ id, onSale }: props) => {
   }
 
   function handleEmpty(): void {
-    const sale = (plasticBottles + metalBottles + glassBottles) * 1.36;
+    const sale = (plasticBottles + metalBottles + glassBottles) * 1.75;
     onSale(sale);
-    console.log("Sale: " + sale);
     setPlasticBottles(0);
     setMetalBottles(0);
     setGlassBottles(0);
@@ -204,7 +203,7 @@ const RecyclerComponent = ({ id, onSale }: props) => {
             Fix
           </Button>
         </Tooltip>
-        <Tooltip title="Empties the bottle containers to make room for more">
+        <Tooltip title="Empties the bottle containers and sell them, in order to make room for more bottles. Takes 3 seconds">
           <Button variant="contained" size="small" onClick={handleEmpty}>
             Empty
           </Button>
