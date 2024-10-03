@@ -36,6 +36,7 @@ const RecyclerComponent = ({ id, onSale }: props) => {
   const [customerQueue, setCustomerQueue] = useState<Customer[]>([]);
   const [state, setState] = useState(recyclerState.Stopped);
   const [progress, setProgress] = useState<number | undefined>(0);
+  const [disableStartButton, setDisableStartButton] = useState(false);
 
   const maxBottles = 100;
 
@@ -115,6 +116,8 @@ const RecyclerComponent = ({ id, onSale }: props) => {
   ]);
 
   function handleStartStop(): void {
+    if (disableStartButton) return;
+
     if (state === recyclerState.Stopped) {
       setState(recyclerState.Running);
 
@@ -128,17 +131,20 @@ const RecyclerComponent = ({ id, onSale }: props) => {
   }
 
   function handleEmpty(): void {
-    const sale = (plasticBottles + metalBottles + glassBottles) * 1.75;
+    const sale = (plasticBottles + metalBottles + glassBottles) * 2.75;
     onSale(sale);
     setPlasticBottles(0);
     setMetalBottles(0);
     setGlassBottles(0);
     setState(recyclerState.Stopped);
+
+    disableButton(setDisableStartButton, 3000);
   }
 
   function handleJam(): void {
     setJam(false);
     setState(recyclerState.Stopped);
+    disableButton(setDisableStartButton, 1000);
   }
 
   return (
@@ -186,6 +192,7 @@ const RecyclerComponent = ({ id, onSale }: props) => {
           <Button
             variant="contained"
             size="small"
+            disabled={disableStartButton}
             onClick={() => {
               handleStartStop();
             }}
@@ -193,7 +200,7 @@ const RecyclerComponent = ({ id, onSale }: props) => {
             {state === recyclerState.Stopped ? "Start" : "Stop"}
           </Button>
         </Tooltip>
-        <Tooltip title="Fix a jam and reset the recycler">
+        <Tooltip title="Fix a jam and reset the recycler. Takes 1 second">
           <Button
             variant="contained"
             size="small"
@@ -203,7 +210,7 @@ const RecyclerComponent = ({ id, onSale }: props) => {
             Fix
           </Button>
         </Tooltip>
-        <Tooltip title="Empties the bottle containers and sell them, in order to make room for more bottles. Takes 3 seconds">
+        <Tooltip title="Empties the bottle containers and sell them, in order to make room for more bottles. Takes 3 seconds.">
           <Button variant="contained" size="small" onClick={handleEmpty}>
             Empty
           </Button>
@@ -214,6 +221,13 @@ const RecyclerComponent = ({ id, onSale }: props) => {
 };
 
 export default RecyclerComponent;
+
+function disableButton(setDisableStartButton, milliseconds: number) {
+  setDisableStartButton(true);
+  setTimeout(() => {
+    setDisableStartButton(false);
+  }, milliseconds);
+}
 
 function CheckForNewCustomer(generateRandomCustomer: () => Customer) {
   const chance = 0.05; // 5% change of new customer

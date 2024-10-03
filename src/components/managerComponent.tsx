@@ -10,7 +10,7 @@ interface props {
   initialMoney: number;
 }
 
-const recyclerPrice = 600;
+const recyclerPrice = 400;
 
 const ManagerComponent = ({ initialMoney }: props) => {
   const [recyclerList, setRecyclerList] = React.useState<Recycler[]>([]);
@@ -72,9 +72,7 @@ const ManagerComponent = ({ initialMoney }: props) => {
   }
 
   function handleSale(saleAmount: number): void {
-    setTimeout(() => {
-      setMoney(money + saleAmount);
-    }, 3000);
+    setMoney(money + saleAmount);
   }
 
   function restart(): void {
@@ -99,7 +97,7 @@ const ManagerComponent = ({ initialMoney }: props) => {
             Goal: {goal} in {timer}
           </h1>
           {!gameOver && (
-            <Tooltip title="$600">
+            <Tooltip title={recyclerPrice}>
               <Button variant="contained" onClick={handleBuyRecycler}>
                 Buy recycler
               </Button>
