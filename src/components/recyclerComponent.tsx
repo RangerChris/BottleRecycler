@@ -142,6 +142,8 @@ const RecyclerComponent = ({ id, onSale }: props) => {
   }
 
   function handleJam(): void {
+    if (Jam == false) return;
+
     setJam(false);
     setState(recyclerState.Stopped);
     disableButton(setDisableStartButton, 1000);
@@ -222,7 +224,10 @@ const RecyclerComponent = ({ id, onSale }: props) => {
 
 export default RecyclerComponent;
 
-function disableButton(setDisableStartButton, milliseconds: number) {
+function disableButton(
+  setDisableStartButton: React.Dispatch<React.SetStateAction<boolean>>,
+  milliseconds: number
+) {
   setDisableStartButton(true);
   setTimeout(() => {
     setDisableStartButton(false);
