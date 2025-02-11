@@ -36,7 +36,7 @@ const ManagerComponent = ({ initialMoney }: props) => {
         clearInterval(intervalId);
         if (money >= goal) {
           setMinutes(1);
-          setGoal(goal + goal * 1.5);
+          setGoal(goal + goal * 1.2);
         } else {
           setGameOver(true);
         }

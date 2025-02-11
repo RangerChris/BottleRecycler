@@ -131,7 +131,7 @@ const RecyclerComponent = ({ id, onSale }: props) => {
   }
 
   function handleEmpty(): void {
-    const sale = (plasticBottles + metalBottles + glassBottles) * 2.75;
+    const sale = (plasticBottles + metalBottles + glassBottles) * 2.95;
     onSale(sale);
     setPlasticBottles(0);
     setMetalBottles(0);
