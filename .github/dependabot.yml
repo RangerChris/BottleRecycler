@@ -8,7 +8,7 @@ updates:
   - package-ecosystem: "npm"
     directory: "/" # Location of package manifests
     schedule:
-      interval: "weekly"
+      interval: "monthly"
     # Add an ignore condition for patch updates
     ignore:
       - dependency-name: "*"
