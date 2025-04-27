@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "commonjs",
-  "homepage": "https://github.com/RangerChris/BottleRecycler",
+  "homepage": "https://rangerchris.github.io/BottleRecycler",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build && tsc server.ts --outDir dist",
@@ -12,7 +12,7 @@
     "test": "npx playwright test --ui",
     "start": "node dist/server.js",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
