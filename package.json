@@ -1,7 +1,7 @@
 {
   "name": "bottle-recycler",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.0.1",
   "type": "commonjs",
   "homepage": "https://rangerchris.github.io/BottleRecycler",
   "scripts": {
