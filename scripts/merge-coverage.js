@@ -17,11 +17,18 @@ const map = libCoverage.createCoverageMap({});
 
 files.forEach((f) => {
   const p = path.join(coverageDir, f);
-  const cov = JSON.parse(fs.readFileSync(p, "utf8"));
   try {
+    // Read and parse the file, then merge into the coverage map.
+    // Protect both JSON.parse and map.merge so a bad file doesn't abort the whole run.
+    const raw = fs.readFileSync(p, "utf8");
+    const cov = JSON.parse(raw);
     map.merge(cov);
   } catch (err) {
-    console.warn("Failed to merge", p, err.message);
+    // Log a helpful warning with full path and error details (message + stack) and continue.
+    console.warn(`Warning: failed to process coverage file ${p}: ${err && err.message}`);
+    if (err && err.stack) {
+      console.warn(err.stack);
+    }
   }
 });
 
