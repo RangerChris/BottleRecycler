@@ -1,6 +1,6 @@
 import * as express from "express";
 import * as path from "path";
-import * as rateLimit from "express-rate-limit";
+import rateLimit from "express-rate-limit";
 
 const app = express();
 const port = process.env.PORT || 80;
