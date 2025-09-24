@@ -7,7 +7,7 @@ fs.mkdirSync(coverageDir, { recursive: true });
 
 baseTest.afterEach(async ({ page }, testInfo) => {
   try {
-    const cov = await page.evaluate(() => (window as any).__coverage__ || null);
+  const cov = await page.evaluate(() => ((window as unknown) as Record<string, unknown>).__coverage__ || null);
     if (cov) {
       const safeTitle = testInfo.title.replace(/[<>:"/\\|?*\s]+/g, "_");
       const filename = path.join(
@@ -16,7 +16,7 @@ baseTest.afterEach(async ({ page }, testInfo) => {
       );
       fs.writeFileSync(filename, JSON.stringify(cov));
     }
-  } catch (e) {
+  } catch {
     // ignore
   }
 });

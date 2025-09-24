@@ -26,14 +26,22 @@ npm run preview          # Preview production build
 ```
 
 ### Testing Strategy
-- **E2E Testing**: Playwright with coverage collection
-- **Coverage**: Custom merge script combines Playwright coverage reports
-- **Key Commands**:
-  ```bash
-  npm run test             # Interactive Playwright UI
-  npm run test:coverage    # Headless tests with coverage
-  npm run coverage         # Full coverage workflow (server + test + merge)
-  ```
+
+**Testing Frameworks:**
+- Only [Playwright](https://playwright.dev/) (E2E/UI) and [Vitest](https://vitest.dev/) (unit/component) are used for all tests. Jest and other runners are NOT used.
+
+**E2E Testing:** Playwright with coverage collection
+**Unit/Component Testing:** Vitest with Testing Library
+**Coverage:** Custom merge script combines Playwright and Vitest coverage reports
+
+**Key Commands:**
+```bash
+npm run test                # Playwright UI
+npm run test:coverage       # Playwright headless with coverage
+npm run vitest:coverage     # Vitest coverage
+npm run vitest:coverage:open # Open Vitest coverage report
+npm run coverage            # Full coverage workflow (server + test + merge)
+```
 
 ### Deployment
 - **GitHub Pages**: Automated deployment via `gh-pages` package
