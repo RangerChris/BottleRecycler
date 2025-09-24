@@ -17,6 +17,12 @@ import { BottleType } from "../domain/Bottle";
 interface props {
   id: number;
   onSale: (saleAmount: number) => void;
+  testOverrides?: {
+    randomFn?: () => number; // deterministic random for tests
+    intervalMs?: number; // override interval duration
+    autoGenerateCustomers?: boolean; // disable auto customer creation
+    initialQueue?: Customer[]; // set initial customers
+  };
 }
 
 enum recyclerState {
@@ -26,14 +32,22 @@ enum recyclerState {
   Error = "Error",
 }
 
-const RecyclerComponent = ({ id, onSale }: props) => {
+const RecyclerComponent = ({ id, onSale, testOverrides }: props) => {
+  const randomFn = testOverrides?.randomFn ?? Math.random;
+  const intervalMs = testOverrides?.intervalMs ?? 400;
+  const autoGenerate =
+    testOverrides?.autoGenerateCustomers === undefined
+      ? true
+      : testOverrides.autoGenerateCustomers;
   const [plasticBottles, setPlasticBottles] = useState(0);
   const [glassBottles, setGlassBottles] = useState(0);
   const [metalBottles, setMetalBottles] = useState(0);
   const [Jam, setJam] = useState(false);
   const [customer, setCustomer] = useState<Customer>();
   const [customerCounter, setCustomerCounter] = useState<number>(1);
-  const [customerQueue, setCustomerQueue] = useState<Customer[]>([]);
+  const [customerQueue, setCustomerQueue] = useState<Customer[]>(
+    testOverrides?.initialQueue ? [...testOverrides.initialQueue] : []
+  );
   const [state, setState] = useState(recyclerState.Stopped);
   const [progress, setProgress] = useState<number | undefined>(0);
   const [disableStartButton, setDisableStartButton] = useState(false);
@@ -53,19 +67,19 @@ const RecyclerComponent = ({ id, onSale }: props) => {
         setState(recyclerState.Full);
       }
 
-      if (customerQueue.length <= 4) {
-        CheckForNewCustomer(generateRandomCustomer);
+      if (autoGenerate && customerQueue.length <= 4) {
+        CheckForNewCustomer(generateRandomCustomer, randomFn);
       }
 
       if (state == recyclerState.Running) {
         const chance = 0.01; // 1% chance of a jam
-        if (Math.random() < chance) {
+        if (randomFn() < chance) {
           setState(recyclerState.Error);
           setJam(true);
         }
       }
     };
-    const intervalId = setInterval(recyclerLoop, 400);
+    const intervalId = setInterval(recyclerLoop, intervalMs);
 
     return () => {
       clearInterval(intervalId);
@@ -113,6 +127,9 @@ const RecyclerComponent = ({ id, onSale }: props) => {
     metalBottles,
     plasticBottles,
     state,
+    autoGenerate,
+    randomFn,
+    intervalMs,
   ]);
 
   function handleStartStop(): void {
@@ -159,7 +176,7 @@ const RecyclerComponent = ({ id, onSale }: props) => {
         <br />
         Customer {customerQueue?.at(0)?.Id} progress
         <br />
-        <LinearProgress variant="determinate" value={progress} />
+  <LinearProgress variant="determinate" value={progress ?? 0} />
         {progress}
         <p></p>
         <List>
@@ -234,9 +251,12 @@ function disableButton(
   }, milliseconds);
 }
 
-function CheckForNewCustomer(generateRandomCustomer: () => Customer) {
-  const chance = 0.05; // 5% change of new customer
-  if (Math.random() < chance) {
+function CheckForNewCustomer(
+  generateRandomCustomer: () => Customer,
+  randomFn: () => number = Math.random
+) {
+  const chance = 0.05; // 5% chance of new customer
+  if (randomFn() < chance) {
     generateRandomCustomer();
   }
 }

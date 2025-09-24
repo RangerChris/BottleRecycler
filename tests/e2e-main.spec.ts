@@ -1,5 +1,6 @@
 import { test, expect } from "./playwright-coverage";
 
+// ...existing code...
 test("Go to main page", async ({ page }) => {
   await page.goto("/");
   await expect(page).toHaveTitle(/Bottle Recycler/);

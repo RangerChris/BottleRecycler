@@ -9,12 +9,12 @@ export default defineConfig(({ mode }) => {
     plugins: [
       react(),
       isCoverage &&
-        istanbul({
-          include: ["src/**/*"],
-          exclude: ["node_modules", "tests/**/*"],
-          extension: [".ts", ".tsx", ".js", ".jsx"],
-          requireEnv: false,
-        }),
+        (() => {
+          console.log("Istanbul plugin active: coverage mode");
+          return istanbul({
+            include: ["src/**/*"],
+          });
+        })(),
     ].filter(Boolean),
     base: "/BottleRecycler/",
   };

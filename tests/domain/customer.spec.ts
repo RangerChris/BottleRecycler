@@ -1,5 +1,4 @@
-import { expect } from "@playwright/test";
-import { describe, it } from "node:test";
+import { describe, it, expect } from "vitest";
 import Customer from "../../src/domain/customer";
 
 const testId: number = 237;
