@@ -16,8 +16,10 @@ function App() {
 
   return (
     <>
-      <Container maxWidth="lg" sx={{ display: "flex", justifyContent: "left", padding: 10 }} >
-        <AppBar position="fixed" sx={{ zIndex: 1000 }}>
+      <Container
+        maxWidth="lg"
+        sx={{ display: "flex", justifyContent: "flex-start", padding: 10 }}
+      >        <AppBar position="fixed" sx={{ zIndex: 1000 }}>
           <Toolbar sx={{ alignItems: 'center' }}>
             <Typography variant="h2" sx={{ mr: 4 }}>Bottle Recycler</Typography>
             <InstructionsComponent />

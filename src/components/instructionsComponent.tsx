@@ -46,18 +46,22 @@ class InstructionsComponent extends Component<object, InstructionsState> {
                         <Typography id="modal-modal-title" variant="h6" component="h2">
                             Instructions
                         </Typography>
-                        <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                            <p>The purpose of this game is to simulate a bottle recycling system.</p>
+                        <Box id="modal-modal-description" sx={{ mt: 2 }}>
+                            <Typography paragraph>
+                                The purpose of this game is to simulate a bottle recycling system.
+                            </Typography>
 
-                            <p>You start with a certain amount of money and can hire recyclers to process bottles brought in by customers.
+                            <Typography paragraph>
+                                You start with a certain amount of money and can hire recyclers to process bottles brought in by customers.
                                 Each recycler can handle one customer at a time, and customers arrive randomly.
-                                The more recyclers you have, the faster you can process bottles and earn money.</p>
+                                The more recyclers you have, the faster you can process bottles and earn money.
+                            </Typography>
 
-                            However, each recycler costs money to hire, so you need to balance your workforce with your budget.
-                            The goal is to maximize your profits by efficiently managing your recyclers and handling customer demand.
-
-                            <p>Click to collapse/expand these instructions.</p>
-                        </Typography>
+                            <Typography>
+                                However, each recycler costs money to hire, so you need to balance your workforce with your budget.
+                                The goal is to maximize your profits by efficiently managing your recyclers and handling customer demand.
+                            </Typography>
+                        </Box>
                     </Box>
                 </Modal>
             </div>
