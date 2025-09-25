@@ -1,6 +1,7 @@
 import { Button, Stack, Tooltip } from "@mui/material";
 import RecyclerComponent from "./recyclerComponent";
 import React, { useEffect, useState } from "react";
+import InstructionsComponent from "./instructionsComponent";
 
 type Recycler = {
   id: number;
@@ -92,20 +93,21 @@ const ManagerComponent = ({ initialMoney }: props) => {
           justifyContent={"space-evenly"}
           sx={{ width: "100%", flexGrow: 2 }}
         >
+
           <h1>Money: ${money.toFixed(2)}</h1>
           <h1>
             Goal: {goal} in {timer}
           </h1>
           {!gameOver && (
             <Tooltip title={recyclerPrice}>
-              <Button variant="contained" onClick={handleBuyRecycler}>
+              <Button variant="contained" onClick={handleBuyRecycler} sx={{ height: '50px' }}>
                 Buy recycler
               </Button>
             </Tooltip>
           )}
 
           {gameOver && (
-            <Button variant="contained" onClick={restart}>
+            <Button variant="contained" onClick={restart} sx={{ height: '50px' }}>
               Start game
             </Button>
           )}
@@ -127,7 +129,9 @@ const ManagerComponent = ({ initialMoney }: props) => {
             />
           ))}
         </Stack>
+
       </Stack>
+
     </>
   );
 };
