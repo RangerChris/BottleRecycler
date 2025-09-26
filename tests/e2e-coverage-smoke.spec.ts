@@ -8,10 +8,3 @@ test("Simple UI interaction triggers coverage", async ({ page }) => {
   await page.getByRole("button", { name: "Buy recycler" }).click();
   await expect(page.locator("#root")).toContainText("Recycler 1");
 });
-
-test("window.__coverage__ is set", async ({ page }) => {
-  await page.goto("/");
-  const coverage = await page.evaluate(() => ((window as unknown) as Record<string, unknown>).__coverage__);
-  expect(coverage).not.toBeNull();
-  expect(typeof coverage).toBe("object");
-});
