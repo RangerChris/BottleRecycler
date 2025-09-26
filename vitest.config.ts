@@ -8,7 +8,7 @@ export default defineConfig({
       "tests/domain/**/*.spec.ts",
       "tests/components/**/*.spec.{ts,tsx}"
     ],
-    setupFiles: ["tests/setupTests.ts"],
+  setupFiles: ["tests/vitest-setup/setupTests.ts"],
     exclude: [
       "tests/e2e-*.spec.ts",
       "tests/e2e/*.spec.ts",

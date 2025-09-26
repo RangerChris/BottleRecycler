@@ -12,6 +12,10 @@ import { defineConfig, devices } from "@playwright/test";
  */
 export default defineConfig({
   testDir: "./tests",
+  // Only run end-to-end tests whose filenames start with `e2e-`.
+  // This prevents Playwright from attempting to execute Vitest unit/component
+  // specs that import Vitest APIs (which causes the Symbol redefinition error).
+  testMatch: ["**/e2e-*.spec.ts"],
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
