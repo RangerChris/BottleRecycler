@@ -90,8 +90,7 @@ const ManagerComponent = ({ initialMoney }: props) => {
         <Stack
           direction="row"
           spacing={10}
-          justifyContent={"space-evenly"}
-          sx={{ width: "100%", flexGrow: 2 }}
+          sx={{ width: "100%", flexGrow: 2, justifyContent: "space-evenly" }}
         >
 
           <h1>Money: ${money.toFixed(2)}</h1>
@@ -116,10 +115,9 @@ const ManagerComponent = ({ initialMoney }: props) => {
         <p></p>
 
         <Stack
-          justifyContent="end"
           direction={"row"}
           spacing={6}
-          sx={{ flexWrap: "wrap" }}
+          sx={{ flexWrap: "wrap", justifyContent: "flex-end" }}
         >
           {recyclerList.map((recycler) => (
             <RecyclerComponent

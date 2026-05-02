@@ -47,11 +47,11 @@ class InstructionsComponent extends Component<object, InstructionsState> {
                             Instructions
                         </Typography>
                         <Box id="modal-modal-description" sx={{ mt: 2 }}>
-                            <Typography paragraph>
+                            <Typography component="p" sx={{ mb: 2 }}>
                                 The purpose of this game is to simulate a bottle recycling system.
                             </Typography>
 
-                            <Typography paragraph>
+                            <Typography component="p" sx={{ mb: 2 }}>
                                 You start with a certain amount of money and can hire recyclers to process bottles brought in by customers.
                                 Each recycler can handle one customer at a time, and customers arrive randomly.
                                 The more recyclers you have, the faster you can process bottles and earn money.
