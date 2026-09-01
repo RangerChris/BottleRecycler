@@ -28,7 +28,7 @@
     "@mui/icons-material": "^9.3.1",
     "@mui/material": "^9.3.1",
     "express": "^5.2.1",
-    "express-rate-limit": "^8.6.2",
+    "express-rate-limit": "^8.7.0",
     "react": "^19.2.8",
     "react-dom": "^19.2.8"
   },
